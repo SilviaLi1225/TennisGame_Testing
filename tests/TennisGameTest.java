@@ -30,6 +30,7 @@ public class TennisGameTest {
 		assertEquals("Initial score incorrect", "love - love", score);		
 	}
 	
+	
 	@Test
 	public void testTennisGame_EahcPlayerWin4Points_Score_Deuce() throws TennisGameException {
 		//Arrange
@@ -48,8 +49,138 @@ public class TennisGameTest {
 		//Act
 		String score = game.getScore() ;
 		// Assert
-		assertEquals("Tie score incorrect", "deuce", score);		
+		assertEquals("deduce incorrect", "deuce", score);		
 	}
+	
+	@Test
+	public void testTennisGame_scoreFormat() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+				
+		game.player1Scored();
+		game.player1Scored();
+		game.player1Scored();
+				
+		game.player2Scored();
+		game.player2Scored();
+				
+		//Act
+		String score = game.getScore();
+		//Assert
+		assertEquals("Tie score format incorrect","40 - 30", score);
+	}
+	
+	@Test
+	public void testTennisGame_getScoreDefault() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+						
+		//Act
+		String score = game.getScore();
+		//Assert
+		assertEquals("Tie score format incorrect","love - love", score);
+	}
+	
+	@Test
+	public void testTennisGame_Player1Win4Points_Score_Advantage() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+		
+		game.player1Scored();
+		game.player1Scored();
+		game.player1Scored();
+		
+		game.player2Scored();
+		game.player2Scored();
+		game.player2Scored();
+		
+		game.player1Scored();
+		//Act
+		String score = game.getScore();
+		//Assert
+		assertEquals("player1 has advantage incorrect","player1 has advantage", score);
+	}
+	
+	@Test
+	public void testTennisGame_Player2Win4Points_Score_Advantage() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+		
+		game.player2Scored();
+		game.player2Scored();
+		game.player2Scored();
+		
+		game.player1Scored();
+		game.player1Scored();
+		game.player1Scored();
+		
+		game.player2Scored();
+		//Act
+		String score = game.getScore();
+		//Assert
+		assertEquals("player 2 has advantage incorrect","player2 has advantage", score);
+	}
+	
+	@Test
+	public void testTennisGame_Player1Wins() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+				
+		game.player1Scored();
+		game.player1Scored();
+		game.player1Scored();
+				
+		game.player2Scored();
+		game.player2Scored();
+		game.player2Scored();
+				
+		game.player1Scored();
+		game.player2Scored();
+		game.player1Scored();
+		game.player1Scored();
+		//Act
+		String score = game.getScore();
+		//Assert
+		assertEquals("Player1 win incorrect","player1 wins", score);
+	}
+	
+	@Test
+	public void testTennisGame_Player2Wins() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+				
+		game.player1Scored();
+		game.player1Scored();
+		game.player1Scored();
+				
+		game.player2Scored();
+		game.player2Scored();
+		game.player2Scored();
+				
+		game.player1Scored();
+		game.player2Scored();
+		game.player2Scored();
+		game.player2Scored();
+		//Act
+		String score = game.getScore();
+		//Assert
+		assertEquals("Player2 win incorrect","player2 wins", score);
+	}
+	
+	
+	@Test (expected = TennisGameException.class)
+	public void testTennisGame_BeforeGameEnded_ResultsException() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+		//Act
+		game.player1Scored();
+		game.player1Scored();
+		game.player1Scored();
+		//Act
+		// This statement should not cause an exception
+		game.player1Scored();		
+	}
+	
 	
 	@Test (expected = TennisGameException.class)
 	public void testTennisGame_Player1WinsPointAfterGameEnded_ResultsException() throws TennisGameException {
@@ -63,5 +194,19 @@ public class TennisGameTest {
 		//Act
 		// This statement should cause an exception
 		game.player1Scored();			
-	}		
+	}	
+	
+	@Test (expected = TennisGameException.class)
+	public void testTennisGame_Player2WinsPointAfterGameEnded_ResultsException() throws TennisGameException{
+		//Arrange
+		TennisGame game = new TennisGame();
+		//Act
+		game.player2Scored();
+		game.player2Scored();
+		game.player2Scored();
+		game.player2Scored();
+		//Act
+		// This statement should cause an exception
+		game.player2Scored();		
+	}
 }
